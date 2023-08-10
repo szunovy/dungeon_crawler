@@ -1,0 +1,7 @@
+d - doors_leaf_closed
+h - wall_hole_1
+l - wall_fountain_mid_red_anim
+r - wall_banner_red
+g - wall_banner_green
+b - wall_banner_blue
+y - wall_banner_yellow
