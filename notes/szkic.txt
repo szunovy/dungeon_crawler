@@ -1,0 +1,91 @@
+	ENTITY (po niej dziedziczy hero i enemy)
+--------------
+   ATTRS:
+hp
+mana
+attk
+def
+weapon
+armor
+grafika_postaci
+experience_points
+level
+position (x,y)
+
+
+   METHODS:
+move
+update_stats()  # (przeliczanie statów przy zmianie itemów i po walce (do lvlup))
+attack(enemy)
+
+
+
+	HERO (ENTITY)    (klasa głownego bohatera)
+-------
+	ATTRS:
+hp
+mana
+attk
+def
+equipment[]
+weapon
+armor
+
+grafika postaci
+
+
+	METHODS:
+move
+update_stats (przeliczanie statów przy zmianie itemów)
+attack
+get_hit
+wear_item(slot, item)
+use_item(item)
+drop_item(item)
+
+
+
+	ITEM (klasa po której dziedziczą wszystkie itemy)
+-----------
+  ATTRS:
+grafika itemu
+opis
+stat {słownik które statystyki zawiera przedmiot}
+type (type of item)
+
+
+	ARMOR (ITEM)
+----------------
+  	ATTRS:
+grafika
+opis
+stat
+
+type = armor
+
+	WEAPON (ITEM)
+----------------
+  	ATTRS:
+grafika
+opis
+stat
+
+type = weapon
+
+
+	ENEMY(ENTITY) (klasa po której dziedziczą mobki)
+-------------
+hp
+mana
+attk
+def
+
+weapon
+armor (niekoniecznie musi mieć)
+
+  METHODS
+move(direction)
+attack(target)
+get_hit (method for animating being hit)
+move_random()
+

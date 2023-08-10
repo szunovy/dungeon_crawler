@@ -29,6 +29,17 @@ class Level:
                        pygame.transform.scale2x(pygame.image.load('./assets/frames/floor_7.png').convert_alpha()),
                        pygame.transform.scale2x(pygame.image.load('./assets/frames/floor_8.png').convert_alpha()),
                        ],
+            'doors' : [pygame.image.load('./assets/frames/doors_leaf_closed.png').convert_alpha(),
+                       pygame.image.load('./assets/frames/doors_leaf_open.png').convert_alpha()],
+            'wall_hole' : pygame.transform.scale2x(pygame.image.load('./assets/frames/wall_hole_1.png').convert_alpha()),
+            'banner_blue' : pygame.transform.scale2x(
+                pygame.image.load('./assets/frames/wall_banner_blue.png').convert_alpha()),
+            'banner_red': pygame.transform.scale2x(
+                pygame.image.load('./assets/frames/wall_banner_red.png').convert_alpha()),
+            'banner_green': pygame.transform.scale2x(
+                pygame.image.load('./assets/frames/wall_banner_green.png').convert_alpha()),
+            'banner_yellow': pygame.transform.scale2x(
+                pygame.image.load('./assets/frames/wall_banner_yellow.png').convert_alpha()),
         }
 
 
@@ -40,7 +51,19 @@ class Level:
                 if col == 'w':
                     Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['wall'])
                 if col in (' ','s'):  # draw floor when wall not present
-                    Block((x, y), [self.background_sprites], choice(map_images['floor']))  # randomize floor
+                    Block((x, y), [self.background_sprites], choice(map_images['floor']))  # randomize
+                if col == 'h':
+                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['wall_hole'])
+                if col == 'r':
+                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['banner_red'])
+                if col == 'g':
+                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['banner_green'])
+                if col == 'b':
+                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['banner_blue'])
+                if col == 'y':
+                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['banner_yellow'])
+                if col == 'd':
+                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['doors'][0])
                 if col == 's':
                     self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites)
 

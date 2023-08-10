@@ -4,6 +4,8 @@ from os import walk
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups)
+
+        # reading animation graphics from folder
         self.images = {'idle_L' : [],
                            'idle_R' : [],
                            'run_R' : [],
@@ -26,12 +28,15 @@ class Player(pygame.sprite.Sprite):
         self.orientation = 'L'
         self.move_status = 'idle'
         self.frame_index = 0
-        self.direction = pygame.math.Vector2()
+
         self.speed = 2
         self.animation_speed = 0.10
         self.obstacle_sprites = obstacle_sprites
-        self.hitbox = self.rect
+        # self.hitbox = self.rect
+        self.direction = pygame.math.Vec
 
+
+        self.weapon
     def input(self):
         keys = pygame.key.get_pressed()
 
@@ -50,6 +55,9 @@ class Player(pygame.sprite.Sprite):
             self.orientation = 'L'
         else:
             self.direction.x = 0
+
+        if keys[pygame.K_SPACE]:
+            self.attacking = True
 
     def move(self, speed):
         if self.direction.magnitude() != 0:
