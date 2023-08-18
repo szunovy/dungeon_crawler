@@ -1,5 +1,6 @@
 import pygame
 from os import walk
+import files_handling
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites):
@@ -9,16 +10,20 @@ class Player(pygame.sprite.Sprite):
                            'run_R' : [],
                            'run_L' : [],
                            }
-        for animation_set in self.images.keys():
-            path = './assets/player/' + animation_set
-            for _,__,frames_names in walk(path):
-                for frame_name in frames_names:
-                    # all images in assets faces right so a flip is needed
-                    if animation_set[-1] == "L":
-                        frame = pygame.transform.flip(pygame.image.load('./assets/frames/' + frame_name).convert_alpha(), 1, 0)
-                    else:
-                        frame = pygame.image.load('./assets/frames/' + frame_name).convert_alpha()
-                    self.images[animation_set].append(frame)
+
+        self.images = files_handling.load_images('player',self.images.keys())
+
+
+        # for animation_set in self.images.keys():
+        #     path = './assets/player/' + animation_set
+        #     for _,__,frames_names in walk(path):
+        #         for frame_name in frames_names:
+        #             # all images in assets faces right so a flip is needed
+        #             if animation_set[-1] == "L":
+        #                 frame = pygame.transform.flip(pygame.image.load('./assets/frames/' + frame_name).convert_alpha(), 1, 0)
+        #             else:
+        #                 frame = pygame.image.load('./assets/frames/' + frame_name).convert_alpha()
+        #             self.images[animation_set].append(frame)
 
 
         self.image = self.images['idle_L'][0]

@@ -67,6 +67,13 @@ class Level:
                 if col == 's':
                     self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites)
 
+                #potem do wruzcenia w osobnym pliku
+                if col == 'E':
+                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['wall'])
+                    monster_type = 'skeleton'
+                    # Enemy(monster_type,(x,y),[self.visible_sprites],self.obstacle_sprites)
+
+
     def run(self):
         # update and draw the game
         self.background_sprites.draw(self.display_surface)
