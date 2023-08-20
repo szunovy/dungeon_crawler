@@ -11,7 +11,6 @@ class Game:
         self.screen = pygame.display.set_mode((WIDTH, HEIGTH))
         pygame.display.set_caption('Dungeon Crawler')
         self.clock = pygame.time.Clock()
-
         self.level = Level()
 
     def run(self):

@@ -1,8 +1,10 @@
 import pygame
 from settings import *
-from block import Block
+from block import Block, AnimatedBlock
 from player import Player
 from random import choice
+from files_handling import load_images
+from enemy import Enemy
 
 class Level:
     def __init__(self):
@@ -17,7 +19,7 @@ class Level:
         # sprite setup
         self.create_map()
 
-    def create_map(self):
+    def create_map(self): #TODO ZMIENIC NA WCZYTYWANIE Z AUTOMATU
         map_images = {
             'wall' : pygame.image.load('./assets/level/wall.png').convert_alpha(),
             'floor' : [pygame.transform.scale2x(pygame.image.load('./assets/frames/floor_1.png').convert_alpha()),
@@ -40,9 +42,18 @@ class Level:
                 pygame.image.load('./assets/frames/wall_banner_green.png').convert_alpha()),
             'banner_yellow': pygame.transform.scale2x(
                 pygame.image.load('./assets/frames/wall_banner_yellow.png').convert_alpha()),
+        'lava_fountain' : [pygame.transform.scale2x(pygame.image.load('./assets/frames/wall_fountain_mid_red_anim_f0.png').convert_alpha()),
+                        pygame.transform.scale2x(pygame.image.load('./assets/frames/wall_fountain_mid_red_anim_f1.png').convert_alpha()),
+                        pygame.transform.scale2x(pygame.image.load('./assets/frames/wall_fountain_mid_red_anim_f2.png').convert_alpha()),
+                        ],
+            'skeleton': {'idle_L' : [], #todo do wywalenia
+                           'idle_R' : [],
+                           'run_R' : [],
+                           'run_L' : [],
+                           }
         }
 
-
+        map_images['skeleton'] = load_images('enemies/skeleton') #todo do wywalenia
 
         for row_index, row in enumerate(MAP):
             for col_index, col in enumerate(row):
@@ -50,7 +61,7 @@ class Level:
                 y = row_index * TILESIZE
                 if col == 'w':
                     Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['wall'])
-                if col in (' ','s'):  # draw floor when wall not present
+                if col in (' ','s', 'E'):  # draw floor when wall not present
                     Block((x, y), [self.background_sprites], choice(map_images['floor']))  # randomize
                 if col == 'h':
                     Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['wall_hole'])
@@ -66,12 +77,13 @@ class Level:
                     Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['doors'][0])
                 if col == 's':
                     self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites)
+                if col == 'l':
+                    self.animated_block = AnimatedBlock((x, y), [self.background_sprites, self.obstacle_sprites], map_images['lava_fountain'])
 
                 #potem do wruzcenia w osobnym pliku
                 if col == 'E':
-                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['wall'])
                     monster_type = 'skeleton'
-                    # Enemy(monster_type,(x,y),[self.visible_sprites],self.obstacle_sprites)
+                    Enemy((x,y),[self.visible_sprites],self.obstacle_sprites, map_images[monster_type], monster_type)
 
 
     def run(self):
@@ -80,4 +92,11 @@ class Level:
         self.background_sprites.update()
         self.visible_sprites.draw(self.display_surface)
         self.visible_sprites.update()
+        self.enemy_update(self.player)
         # debug(self.player.direction)
+
+    def enemy_update(self, player):
+        enemy_sprites = [sprite for sprite in self.visible_sprites if
+                         hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
+        for enemy in enemy_sprites:
+            enemy.enemy_update(player)

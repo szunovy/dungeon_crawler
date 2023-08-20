@@ -5,13 +5,9 @@ import files_handling
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites):
         super().__init__(groups)
-        self.images = {'idle_L' : [],
-                           'idle_R' : [],
-                           'run_R' : [],
-                           'run_L' : [],
-                           }
+        # self.images = {}
 
-        self.images = files_handling.load_images('player',self.images.keys())
+        self.images = files_handling.load_images('player')
 
 
         # for animation_set in self.images.keys():
