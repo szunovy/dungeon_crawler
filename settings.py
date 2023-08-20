@@ -40,3 +40,9 @@ enemies_stats = {
                 'speed' : 1.5,
         },
 }
+
+player_stats = {
+        'hp': 6,
+        'damage': 25,
+        'speed': 2,
+}

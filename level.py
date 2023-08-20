@@ -6,6 +6,7 @@ from random import choice
 from files_handling import load_images
 from enemy import Enemy
 
+
 class Level:
     def __init__(self):
         # get the display surface
@@ -15,11 +16,11 @@ class Level:
         self.visible_sprites = pygame.sprite.Group()
         self.obstacle_sprites = pygame.sprite.Group()
         self.background_sprites = pygame.sprite.Group()
-
+        self.enemy_sprites = pygame.sprite.Group()
         # sprite setup
         self.create_map()
 
-    def create_map(self): #TODO ZMIENIC NA WCZYTYWANIE Z AUTOMATU
+    def create_map(self):  # TODO ZMIENIC NA WCZYTYWANIE Z AUTOMATU
         map_images = {
             'wall' : pygame.image.load('./assets/level/wall.png').convert_alpha(),
             'floor' : [pygame.transform.scale2x(pygame.image.load('./assets/frames/floor_1.png').convert_alpha()),
@@ -60,30 +61,30 @@ class Level:
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
                 if col == 'w':
-                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['wall'])
+                    Block((x, y), (self.background_sprites, self.obstacle_sprites), map_images['wall'])
                 if col in (' ','s', 'E'):  # draw floor when wall not present
-                    Block((x, y), [self.background_sprites], choice(map_images['floor']))  # randomize
+                    Block((x, y), (self.background_sprites,), choice(map_images['floor']))  # randomize
                 if col == 'h':
-                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['wall_hole'])
+                    Block((x, y), (self.background_sprites, self.obstacle_sprites), map_images['wall_hole'])
                 if col == 'r':
-                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['banner_red'])
+                    Block((x, y), (self.background_sprites, self.obstacle_sprites), map_images['banner_red'])
                 if col == 'g':
-                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['banner_green'])
+                    Block((x, y), (self.background_sprites, self.obstacle_sprites), map_images['banner_green'])
                 if col == 'b':
-                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['banner_blue'])
+                    Block((x, y), (self.background_sprites, self.obstacle_sprites), map_images['banner_blue'])
                 if col == 'y':
-                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['banner_yellow'])
+                    Block((x, y), (self.background_sprites, self.obstacle_sprites), map_images['banner_yellow'])
                 if col == 'd':
-                    Block((x, y), [self.background_sprites, self.obstacle_sprites], map_images['doors'][0])
+                    Block((x, y), (self.background_sprites, self.obstacle_sprites), map_images['doors'][0])
                 if col == 's':
-                    self.player = Player((x, y), [self.visible_sprites], self.obstacle_sprites)
+                    self.player = Player((x, y), (self.visible_sprites,), self.obstacle_sprites, self.enemy_sprites)
                 if col == 'l':
-                    self.animated_block = AnimatedBlock((x, y), [self.background_sprites, self.obstacle_sprites], map_images['lava_fountain'])
+                    self.animated_block = AnimatedBlock((x, y), (self.background_sprites, self.obstacle_sprites), map_images['lava_fountain'])
 
                 #potem do wruzcenia w osobnym pliku
                 if col == 'E':
                     monster_type = 'skeleton'
-                    Enemy((x,y),[self.visible_sprites],self.obstacle_sprites, map_images[monster_type], monster_type)
+                    Enemy((x,y),(self.visible_sprites, self.enemy_sprites),self.obstacle_sprites, map_images[monster_type], monster_type)
 
 
     def run(self):
@@ -93,10 +94,16 @@ class Level:
         self.visible_sprites.draw(self.display_surface)
         self.visible_sprites.update()
         self.enemy_update(self.player)
+        self.check_game_over()
         # debug(self.player.direction)
 
     def enemy_update(self, player):
-        enemy_sprites = [sprite for sprite in self.visible_sprites if
-                         hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
-        for enemy in enemy_sprites:
+        # enemy_sprites = [sprite for sprite in self.visible_sprites if
+        #                  hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
+        for enemy in self.enemy_sprites:
             enemy.enemy_update(player)
+
+    def check_game_over(self):
+        if self.player.hp <= 0:
+            print('Game Over')
+        # spawn particles

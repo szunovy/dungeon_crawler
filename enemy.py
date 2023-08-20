@@ -80,7 +80,6 @@ class Enemy(Entity):
 
     def animation(self):
         animation = self.images[self.move_status + '_' + self.orientation]
-        print(self.move_status + '_' + self.orientation)
         # loop over the frame index
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
@@ -96,6 +95,10 @@ class Enemy(Entity):
             current_time = pygame.time.get_ticks()
             if current_time - self.attack_time >= self.attack_cooldown:
                 self.can_attack = True
+
+    def check_death(self):
+        if self.hp <= 0:
+            self.kill()
 
     def update(self):
         self.move(self.speed)

@@ -1,9 +1,10 @@
 import pygame
 from os import walk
 import files_handling
+from settings import player_stats
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, groups, obstacle_sprites):
+    def __init__(self, pos, groups, obstacle_sprites, enemy_sprites):
         super().__init__(groups)
         # self.images = {}
 
@@ -20,7 +21,10 @@ class Player(pygame.sprite.Sprite):
         #             else:
         #                 frame = pygame.image.load('./assets/frames/' + frame_name).convert_alpha()
         #             self.images[animation_set].append(frame)
-
+        # stats
+        self.speed = player_stats['speed']
+        self.hp = player_stats['hp']
+        self.damage = player_stats['damage']
 
         self.image = self.images['idle_L'][0]
         self.rect = self.image.get_rect(topleft = pos)
@@ -28,12 +32,16 @@ class Player(pygame.sprite.Sprite):
         self.move_status = 'idle'
         self.frame_index = 0
 
-        self.speed = 2
+
         self.animation_speed = 0.10
         self.obstacle_sprites = obstacle_sprites
+        self.enemy_sprites = enemy_sprites
         # self.hitbox = self.rect
         self.direction = pygame.math.Vector2()
 
+        self.invulnerable = False
+        self.invulnerability_duration = 400
+        self.hit_time = None
     def input(self):
         keys = pygame.key.get_pressed()
 
@@ -82,6 +90,13 @@ class Player(pygame.sprite.Sprite):
                     if self.direction.y < 0:  # moving up
                         self.rect.top = sprite.rect.bottom
 
+        if not self.invulnerable:
+            for sprite in self.enemy_sprites:
+                if sprite.rect.colliderect(self.rect):
+                    self.get_damage(sprite)
+
+
+
 
     def animation(self):
         animation = self.images[self.move_status + '_' + self.orientation]
@@ -95,7 +110,22 @@ class Player(pygame.sprite.Sprite):
         self.image = animation[int(self.frame_index)]
         # self.rect = self.image.get_rect(topleft = pos)
 
+    def get_damage(self, enemy):
+        self.hp -= enemy.damage
+        self.invulnerable = True
+        self.hit_time = pygame.time.get_ticks()
+        print('trafiony nadziany')
+
+
+    def cooldowns(self):
+        current_time = pygame.time.get_ticks()
+
+        if self.invulnerable:
+            if current_time - self.hit_time >= self.invulnerability_duration:
+                self.invulnerable = False
+
     def update(self):
         self.animation()
         self.input()
         self.move(self.speed)
+        self.cooldowns()
