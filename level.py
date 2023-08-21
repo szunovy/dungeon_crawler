@@ -89,12 +89,14 @@ class Level:
 
     def run(self):
         # update and draw the game
+        self.check_player_hit()
+        self.check_game_over()
+
         self.background_sprites.draw(self.display_surface)
         self.background_sprites.update()
         self.visible_sprites.draw(self.display_surface)
         self.visible_sprites.update()
         self.enemy_update(self.player)
-        self.check_game_over()
         # debug(self.player.direction)
 
     def enemy_update(self, player):
@@ -102,6 +104,13 @@ class Level:
         #                  hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
         for enemy in self.enemy_sprites:
             enemy.enemy_update(player)
+
+    def check_player_hit(self):
+        if not self.player.invulnerable:
+            for sprite in self.enemy_sprites:
+                if sprite.rect.colliderect(self.player.rect):
+                    self.player.get_damage(sprite)
+
 
     def check_game_over(self):
         if self.player.hp <= 0:

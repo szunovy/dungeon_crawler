@@ -40,7 +40,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
 
         self.invulnerable = False
-        self.invulnerability_duration = 400
+        self.invulnerability_duration = 600
         self.hit_time = None
     def input(self):
         keys = pygame.key.get_pressed()
@@ -89,13 +89,6 @@ class Player(pygame.sprite.Sprite):
                         self.rect.bottom = sprite.rect.top
                     if self.direction.y < 0:  # moving up
                         self.rect.top = sprite.rect.bottom
-
-        if not self.invulnerable:
-            for sprite in self.enemy_sprites:
-                if sprite.rect.colliderect(self.rect):
-                    self.get_damage(sprite)
-
-
 
 
     def animation(self):
