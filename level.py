@@ -19,6 +19,7 @@ class Level:
         self.enemy_sprites = pygame.sprite.Group()
         # sprite setup
         self.create_map()
+        self.game_over = False
 
 
     def create_map(self):
@@ -125,11 +126,10 @@ class Level:
                 if sprite.rect.colliderect(self.player.rect):
                     self.player.get_damage(sprite)
 
-
     def check_game_over(self):
         if self.player.hp <= 0:
+            self.game_over = True
             print('Game Over')
-
 
     def load_enemies_images(self):
         self.enemy_images = {}

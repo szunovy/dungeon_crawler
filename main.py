@@ -13,17 +13,26 @@ class Game:
         self.clock = pygame.time.Clock()
         self.level = Level()
 
+        self.font = pygame.font.Font(font_path, text_size)
+        self.game_over_text = self.font.render('Game Over', False, 'Red')
+
     def run(self):
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+            if self.level.game_over:
+                text_width = self.game_over_text.get_width()
+                text_heigth = self.game_over_text.get_height()
+                self.screen.blit(self.game_over_text, (WIDTH/2 - text_width/2, HEIGTH/2 - text_heigth/2))
+                pygame.display.update()
+            else:
+                self.screen.fill((32,32,32))
+                self.level.run()
+                pygame.display.update()
+                self.clock.tick(FPS)
 
-            self.screen.fill((32,32,32))
-            self.level.run()
-            pygame.display.update()
-            self.clock.tick(FPS)
 
 
 if __name__ == '__main__':
