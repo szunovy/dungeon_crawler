@@ -1,9 +1,13 @@
 import csv
+from os import path
 # game setup
 WIDTH = 1280
 HEIGTH = 736
 FPS = 60
 TILESIZE = 32
+
+font_path = path.join('assets', 'font', 'Pixeltype.ttf')
+text_size = 100
 
 # MAP = [
 #         ['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
@@ -78,3 +82,4 @@ player_stats = {
         'damage': 25,
         'speed': 2,
 }
+

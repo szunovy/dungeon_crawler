@@ -19,7 +19,6 @@ def load_images(object_type, resize = 1):
 
     for animation_set in os.listdir(path):
         frames_to_return[animation_set] = []
-        print(animation_set)
         for frame_name in os.listdir(path + '/' + animation_set):
             if animation_set[-1] == "L":
                 # frame = pygame.transform.flip(pygame.image.load(path + animation_set + '/' + frame_name).convert_alpha(), 1, 0)
