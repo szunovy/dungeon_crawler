@@ -4,7 +4,10 @@ from settings import *
 class Block(pygame.sprite.Sprite):
     def __init__(self, pos, groups, image):
         super().__init__(groups)
-        self.image = image
+        if type(image) is list:  # dealing with different types that could be input
+            self.image = image[0]
+        else:
+            self.image = image
         self.rect = self.image.get_rect(topleft=pos)
 
 class AnimatedBlock(pygame.sprite.Sprite):

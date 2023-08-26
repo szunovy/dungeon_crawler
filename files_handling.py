@@ -1,10 +1,11 @@
 import pygame
 import os
-
-def load_images(object_type):
+from settings import TILESIZE
+def load_images(object_type, resize = 1):
     '''returns dictionary of animation frames
 
     function takes a path as an argument and returns a dictionary of animation_type:list of frames pairs
+    second argument is flag if loaded images should be resized to tilesize, to not resize set to 0
     '''
 
     frames_to_return = {}
@@ -27,8 +28,10 @@ def load_images(object_type):
             else:
                 # frame = pygame.image.load(path + '/' + animation_set + '/' + frame_name).convert_alpha()
                 frame = pygame.image.load(os.path.join(path,animation_set, frame_name)).convert_alpha()
-            frames_to_return[animation_set].append(frame)
 
+            if resize:
+                frame = pygame.transform.scale(frame, (TILESIZE, TILESIZE))
+            frames_to_return[animation_set].append(frame)
         # for animation in animation_sets:
         #     frames_to_return[animation_set] = []
         #     for frame_name in frames_names:

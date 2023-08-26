@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(groups)
         # self.images = {}
 
-        self.images = files_handling.load_images('player')
+        self.images = files_handling.load_images('player', 0)
 
 
         # for animation_set in self.images.keys():
