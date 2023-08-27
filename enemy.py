@@ -101,13 +101,13 @@ class Enemy(Entity):
         self.attack_time = pygame.time.get_ticks()
         self.can_be_attacked = False
         if direction == 'up':
-            self.rect.y += 7
+            self.rect.y += 5
         elif direction == 'down':
-            self.rect.y -= 7
+            self.rect.y -= 5
         elif direction == 'left':
-            self.rect.x += 7
+            self.rect.x += 5
         else:
-            self.rect.x -= 8
+            self.rect.x -= 5
         print('enemy hit')
         if self.health <= 0:
             self.kill()
