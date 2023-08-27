@@ -78,8 +78,10 @@ enemies_stats = {
 }
 
 player_stats = {
-        'hp': 6,
+        'hp': 100,
         'damage': 25,
         'speed': 2,
+        'weapon': 'sword',
+        'exp': 0,
 }
 

@@ -35,9 +35,9 @@ class Enemy(Entity):
 
 
         # player interaction
-        self.can_attack = True
+        self.can_be_attacked = True
         self.attack_time = None
-        self.attack_cooldown = 400
+        self.attack_cooldown = 200
 
 
 
@@ -56,7 +56,7 @@ class Enemy(Entity):
     def get_status(self, player):
         distance = self.get_player_distance_direction(player)[0]
 
-        if distance <= self.attack_radius and self.can_attack and self.has_attack:
+        if distance <= self.attack_radius and self.can_be_attacked and self.has_attack:
             if self.move_status != 'attack':
                 self.frame_index = 0
             self.move_status = 'attack'
@@ -84,21 +84,34 @@ class Enemy(Entity):
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
             if self.move_status == 'attack':
-                self.can_attack = False
+                self.can_be_attacked = False
             self.frame_index = 0
 
         self.image = animation[int(self.frame_index)]
         # self.rect = self.image.get_rect(center=self.hitbox.center)
 
     def cooldown(self):
-        if not self.can_attack:
+        if not self.can_be_attacked:
             current_time = pygame.time.get_ticks()
             if current_time - self.attack_time >= self.attack_cooldown:
-                self.can_attack = True
+                self.can_be_attacked = True
 
-    def check_death(self):
-        if self.hp <= 0:
+    def get_damage(self, damage, killer, direction):
+        self.health -= damage
+        self.attack_time = pygame.time.get_ticks()
+        self.can_be_attacked = False
+        if direction == 'up':
+            self.rect.y += 7
+        elif direction == 'down':
+            self.rect.y -= 7
+        elif direction == 'left':
+            self.rect.x += 7
+        else:
+            self.rect.x -= 8
+        print('enemy hit')
+        if self.health <= 0:
             self.kill()
+            killer.exp += self.exp
 
     def update(self):
         self.move(self.speed)

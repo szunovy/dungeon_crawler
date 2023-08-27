@@ -6,6 +6,7 @@ from random import choice
 from files_handling import load_images
 from enemy import Enemy
 from os import path
+from enemy import Enemy
 
 class Level:
     def __init__(self):
@@ -99,7 +100,7 @@ class Level:
                     Enemy((x,y),(self.visible_sprites, self.enemy_sprites),self.obstacle_sprites, self.enemy_images[enemy_type], enemy_type)
                 if col == 'W':
                     enemy_type = 'wizzard'
-                    Enemy((x,y),(self.visible_sprites, self.enemy_sprites),self.obstacle_sprites, self.enemy_images[enemy_type], enemy_type)
+                    self.enemy = Enemy((x,y),(self.visible_sprites, self.enemy_sprites),self.obstacle_sprites, self.enemy_images[enemy_type], enemy_type)
 
 
     def run(self):
@@ -107,12 +108,43 @@ class Level:
         self.check_player_hit()
         self.check_game_over()
 
+
+        self.player.attack()
         self.background_sprites.draw(self.display_surface)
         self.background_sprites.update()
         self.visible_sprites.draw(self.display_surface)
         self.visible_sprites.update()
         self.enemy_update(self.player)
+
+
+        self.print_info()
+        self.check_enemy_hit()
         # debug(self.player.direction)
+
+
+    def print_info(self):
+        heart_img = pygame.image.load('./assets/level/UI/heart_bar_fixed.png')
+        heart_img = pygame.transform.scale_by(heart_img, (0.5, 0.5))
+
+        #health bar
+        #pygame.draw.rect(screen, (255,0,0), pygame.Rect(32, 8, health * 3, 16))
+        #pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(32, 8, 300, 16), 3)
+        #my_font = pygame.font.SysFont('Comic Sans MS', 8)
+        #text_surface = my_font.render(str(health) + '%', False, (255, 255, 255))
+        #screen.blit(text_surface, ((300 + 32)/2, 10))
+        # self.font = pygame.font.Font(font_path, text_size)
+        my_font = pygame.font.Font(font_path, 35)
+        text_surface = my_font.render('HEALTH:', False, (255, 255, 255))
+        self.display_surface.blit(text_surface, (32, 4))
+
+        from_area = pygame.Rect(0, 0, round(82 * self.player.hp/100), 32)
+        self.display_surface.blit(heart_img, (125, 8), from_area)
+
+        text_surface = my_font.render('WEAPON:' + self.player.weapon, False, (255, 255, 255))
+        self.display_surface.blit(text_surface, (250, 4))
+
+        text_surface = my_font.render('EXP:' + str(self.player.exp), False, (255, 255, 255))
+        self.display_surface.blit(text_surface, (450, 4))
 
     def enemy_update(self, player):
         # enemy_sprites = [sprite for sprite in self.visible_sprites if
@@ -125,6 +157,13 @@ class Level:
             for sprite in self.enemy_sprites:
                 if sprite.rect.colliderect(self.player.rect):
                     self.player.get_damage(sprite)
+
+    def check_enemy_hit(self):
+        if self.player.attacking:
+            for sprite in self.enemy_sprites:
+                if sprite.rect.colliderect(self.player.sword):
+                    if sprite.can_be_attacked:
+                        sprite.get_damage(10, self.player, self.player.direction)
 
     def check_game_over(self):
         if self.player.hp <= 0:
