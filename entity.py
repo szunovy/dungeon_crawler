@@ -14,7 +14,6 @@ class Entity(pygame.sprite.Sprite):
 		self.collision('horizontal')
 		self.rect.y += self.direction.y * speed
 		self.collision('vertical')
-		# self.rect.center = self.hitbox.center
 
 	def collision(self,direction):
 		if direction == 'horizontal':

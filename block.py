@@ -1,7 +1,7 @@
 import pygame
 from settings import *
 
-class Block(pygame.sprite.Sprite):
+class Block(pygame.sprite.Sprite):  # static blocks
     def __init__(self, pos, groups, image):
         super().__init__(groups)
         if type(image) is list:  # dealing with different types that could be input
@@ -10,7 +10,7 @@ class Block(pygame.sprite.Sprite):
             self.image = image
         self.rect = self.image.get_rect(topleft=pos)
 
-class AnimatedBlock(pygame.sprite.Sprite):
+class AnimatedBlock(pygame.sprite.Sprite):  #animated blocks
     def __init__(self, pos, groups, images):
         super().__init__(groups)
 

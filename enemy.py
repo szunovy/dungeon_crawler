@@ -21,7 +21,6 @@ class Enemy(Entity):
 
         # movement
         self.rect = self.image.get_rect(topleft=pos)
-        # self.hitbox = self.rect.inflate(0, -10)
         self.obstacle_sprites = obstacle_sprites
 
         # stats
@@ -39,7 +38,11 @@ class Enemy(Entity):
         self.attack_time = None
         self.attack_cooldown = 200
 
-
+        # sounds
+        self.exp_sound = pygame.mixer.Sound('assets/sounds/exp.mp3')
+        self.exp_sound.set_volume(0.5)
+        self.sword_hit_sound = pygame.mixer.Sound('assets/sounds/sword-hit.mp3')
+        self.sword_hit_sound.set_volume(0.5)
 
     def get_player_distance_direction(self, player):
         enemy_vec = pygame.math.Vector2(self.rect.center)
@@ -80,7 +83,6 @@ class Enemy(Entity):
 
     def animation(self):
         animation = self.images[self.move_status + '_' + self.orientation]
-        # loop over the frame index
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
             if self.move_status == 'attack':
@@ -88,29 +90,30 @@ class Enemy(Entity):
             self.frame_index = 0
 
         self.image = animation[int(self.frame_index)]
-        # self.rect = self.image.get_rect(center=self.hitbox.center)
 
     def cooldown(self):
         if not self.can_be_attacked:
             current_time = pygame.time.get_ticks()
             if current_time - self.attack_time >= self.attack_cooldown:
                 self.can_be_attacked = True
-    # test
+
     def get_damage(self, damage, killer, direction):
         self.health -= damage
         self.attack_time = pygame.time.get_ticks()
         self.can_be_attacked = False
         if direction == 'up':
-            self.rect.y += 5
+            self.rect.y += 7
         elif direction == 'down':
-            self.rect.y -= 5
+            self.rect.y -= 7
         elif direction == 'left':
-            self.rect.x += 5
+            self.rect.x += 7
         else:
-            self.rect.x -= 5
+            self.rect.x -= 8
         print('enemy hit')
+        self.sword_hit_sound.play()
         if self.health <= 0:
             self.kill()
+            self.exp_sound.play()
             killer.exp += self.exp
 
     def update(self):

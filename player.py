@@ -1,28 +1,14 @@
 import pygame
-from os import walk
 import files_handling
 from settings import player_stats
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, obstacle_sprites, enemy_sprites):
         super().__init__(groups)
-        # self.images = {}
 
         self.images = files_handling.load_images('player', 0)
         self.sword_texture = pygame.image.load('./assets/player/weapons/weapon_knight_sword.png')
         self.sword = None
-
-        # for animation_set in self.images.keys():
-        #     path = './assets/player/' + animation_set
-        #     for _,__,frames_names in walk(path):
-        #         for frame_name in frames_names:
-        #             # all images in assets faces right so a flip is needed
-        #             if animation_set[-1] == "L":
-        #                 frame = pygame.transform.flip(pygame.image.load('./assets/frames/' + frame_name).convert_alpha(), 1, 0)
-        #             else:
-        #                 frame = pygame.image.load('./assets/frames/' + frame_name).convert_alpha()
-        #             self.images[animation_set].append(frame)
-        # stats
 
         self.speed = player_stats['speed']
         self.hp = player_stats['hp']
@@ -41,7 +27,6 @@ class Player(pygame.sprite.Sprite):
         self.animation_speed = 0.10
         self.obstacle_sprites = obstacle_sprites
         self.enemy_sprites = enemy_sprites
-        # self.hitbox = self.rect
         self.direction = pygame.math.Vector2()
 
         self.invulnerable = False
@@ -52,9 +37,17 @@ class Player(pygame.sprite.Sprite):
         self.attack_cooldown_duration = 300
         self.attack_direction = 'U'
         self.attacking = False
-        self.begin_attack = False
+        self.begin_attack = False  # variable to begin attack when pressing
         self.attack_animation_duration = 150
         self.attack_orientation = self.orientation
+
+
+        # sounds
+        self.hit_sound = pygame.mixer.Sound('assets/sounds/hit.mp3')
+        self.hit_sound.set_volume(0.2)
+        self.weapon_sword_sound = pygame.mixer.Sound('assets/sounds/sword.mp3')
+        self.weapon_sword_sound.set_volume(0.4)
+
     def input(self):
 
         keys = pygame.key.get_pressed()
@@ -112,23 +105,22 @@ class Player(pygame.sprite.Sprite):
     def animation(self):
         animation = self.images[self.move_status + '_' + self.orientation]
 
-        # loop over the frame index
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
             self.frame_index = 0
 
-        # set the image
         self.image = animation[int(self.frame_index)]
-        # self.rect = self.image.get_rect(topleft = pos)
 
     def get_damage(self, enemy):
         self.hp -= enemy.damage
         self.invulnerable = True
         self.hit_time = pygame.time.get_ticks()
         print('player hit')
+        self.hit_sound.play()
 
-    def attack(self):
+    def attack(self):  # attacking and setting parameters to create weapon in proper direction
         if not self.attack_cooldown and self.begin_attack:
+            self.weapon_sword_sound.play()
             self.begin_attack = False
             self.attacking = True
             self.attack_cooldown = True
@@ -136,15 +128,11 @@ class Player(pygame.sprite.Sprite):
             if self.orientation == "R" and not self.direction.y:
                 self.attack_direction = self.attack_orientation
             elif self.orientation == "L" and not self.direction.y:
-                # self.sword = self.screen.blit(pygame.transform.rotate(self.sword_texture, 90), [self.rect.x - 24, self.rect.y + 16])
                 self.attack_direction = self.attack_orientation
             elif self.direction.y > 0:
-                # self.sword = self.screen.blit(pygame.transform.rotate(self.sword_texture, 180), [self.rect.x + 4, self.rect.y + 16])
                 self.attack_direction = self.attack_orientation
             elif self.direction.y < 0:
-                # self.sword = self.screen.blit(self.sword_texture, [self.rect.x + 4, self.rect.y - 16])
                 self.attack_direction = self.attack_orientation
-            print(self.attack_direction)
 
 
     def cooldowns(self):
@@ -158,10 +146,8 @@ class Player(pygame.sprite.Sprite):
             if current_time - self.attack_time >= self.attack_cooldown_duration:
                 self.attack_cooldown = False
 
-
         if self.attacking:
             if current_time - self.attack_time <= self.attack_animation_duration:
-                print('wepon on')
                 self.create_weapon()
             else:
                 self.attacking = False
@@ -172,8 +158,7 @@ class Player(pygame.sprite.Sprite):
         self.move(self.speed)
         self.cooldowns()
 
-    def create_weapon(self):
-        print('create weapon')
+    def create_weapon(self):  # creating weapon on screen for the frame
         if self.attack_direction == 'R':
             self.sword = self.screen.blit(pygame.transform.rotate(self.sword_texture, 270),
                                       [self.rect.x + 12, self.rect.y + 16])
