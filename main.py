@@ -4,8 +4,14 @@ from level import Level
 
 
 class Game:
-    def __init__(self):
+    '''
+    Main class of the game, managing setup, running game and clock.
 
+    Initializes pygame, display and clock. Consists of Level object that manages map and other game mechanics.
+    Plays background music, checks gamestate and manages ending the game.
+    Runs the game by calling level and updates clock ticks.
+    '''
+    def __init__(self):
         # general setup
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGTH))
@@ -22,6 +28,8 @@ class Game:
         main_sound.play(loops = -1)
 
     def run(self):
+        '''Manaes loop running the game. Invokes methods needed every frame, ticks clock and check for game over or exit'''
+
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

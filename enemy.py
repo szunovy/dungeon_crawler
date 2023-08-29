@@ -6,6 +6,15 @@ from entity import Entity
 
 class Enemy(Entity):
     def __init__(self, pos, groups, obstacle_sprites, images,  monster_type):
+        '''Inits Player class
+
+        Args:
+            pos: tuple (x,y) with coordinates where to spawn enemy
+            groups: tuple of sprites groups to add enemy sprite to
+            obstacle_sprites: group of obstacle sprites
+            images: dictionary of lists of images with enemy animation. Refer to files handling.py and assets folder
+            monster_type: string type of monster from list of monsters. Used to obtain statistics from file
+            '''
 
         # general setup
         super().__init__(groups)
@@ -44,7 +53,8 @@ class Enemy(Entity):
         self.sword_hit_sound = pygame.mixer.Sound('assets/sounds/sword-hit.mp3')
         self.sword_hit_sound.set_volume(0.5)
 
-    def get_player_distance_direction(self, player):
+    def get_player_distance_direction(self, player):  # calculates distance to player
+                                                      # and returns tuple of two vectors (distance, direction)
         enemy_vec = pygame.math.Vector2(self.rect.center)
         player_vec = pygame.math.Vector2(player.rect.center)
         distance = (player_vec - enemy_vec).magnitude()
@@ -56,7 +66,7 @@ class Enemy(Entity):
 
         return (distance, direction)
 
-    def get_status(self, player):
+    def get_status(self, player):  # behavior depending on players distance
         distance = self.get_player_distance_direction(player)[0]
 
         if distance <= self.attack_radius and self.can_be_attacked and self.has_attack:
@@ -68,10 +78,9 @@ class Enemy(Entity):
         else:
             self.move_status = 'idle'
 
-    def actions(self, player):
+    def actions(self, player):  # moving and attacking management
         if self.move_status == 'attack':
             self.attack_time = pygame.time.get_ticks()
-            print('attack')
         elif self.move_status == 'run':
             self.direction = self.get_player_distance_direction(player)[1]
         else:
@@ -81,7 +90,7 @@ class Enemy(Entity):
         else:
             self.orientation = 'R'
 
-    def animation(self):
+    def animation(self):  # animating sprite by iterating frames index by animation speed
         animation = self.images[self.move_status + '_' + self.orientation]
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
@@ -91,13 +100,20 @@ class Enemy(Entity):
 
         self.image = animation[int(self.frame_index)]
 
-    def cooldown(self):
+    def cooldown(self):  # managing cooldows
         if not self.can_be_attacked:
             current_time = pygame.time.get_ticks()
             if current_time - self.attack_time >= self.attack_cooldown:
                 self.can_be_attacked = True
 
     def get_damage(self, damage, killer, direction):
+        '''Method managing getting damage from player, knockback, getting killed and giving player exp points
+
+        args:
+            damage: int amount of damage taken
+            killer: killing player
+            direction: string direction of knockback
+        '''
         self.health -= damage
         self.attack_time = pygame.time.get_ticks()
         self.can_be_attacked = False
@@ -108,7 +124,7 @@ class Enemy(Entity):
         elif direction == 'left':
             self.rect.x += 7
         else:
-            self.rect.x -= 8
+            self.rect.x -= 7
         print('enemy hit')
         self.sword_hit_sound.play()
         if self.health <= 0:

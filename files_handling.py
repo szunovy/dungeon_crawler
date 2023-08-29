@@ -2,10 +2,17 @@ import pygame
 import os
 from settings import TILESIZE
 def load_images(object_type, resize = 1):
-    '''returns dictionary of animation frames
+    '''function handling loading images for objects divided by subdirs
 
-    function takes a path as an argument and returns a dictionary of animation_type:list of frames pairs
-    second argument is flag if loaded images should be resized to tilesize, to not resize set to 0
+
+        function takes a path as an argument and returns a dictionary of animation_type:list of frames pairs
+        second argument is flag if loaded images should be resized to tilesize, to not resize set to 0
+    args:
+        object_type: string of objects subdir in assets
+        resize: argument specifying if images should be resized to tile size, default is 1, if not pass a 0 to function
+    returns:
+        dictionary containing lists of all given images/animation types
+
     '''
 
     frames_to_return = {}

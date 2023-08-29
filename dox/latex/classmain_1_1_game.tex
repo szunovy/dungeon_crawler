@@ -1,0 +1,88 @@
+\hypertarget{classmain_1_1_game}{}\doxysection{main.\+Game Class Reference}
+\label{classmain_1_1_game}\index{main.Game@{main.Game}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{classmain_1_1_game_a7418a349fc1b73abae4ebe1758bc3b29}{\+\_\+\+\_\+init\+\_\+\+\_\+}} (self)
+\item 
+def \mbox{\hyperlink{classmain_1_1_game_a5923b67d0b7342d006df6a14733ec1a6}{run}} (self)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classmain_1_1_game_a5ca97d68ad1811d94ed53ed464ad9400}{screen}}
+\item 
+\mbox{\hyperlink{classmain_1_1_game_a72f617c8a9c3f8387aaeff604c5a7770}{clock}}
+\item 
+\mbox{\hyperlink{classmain_1_1_game_adac0174b3ef9bc588ef0d7c0c3e8613e}{level}}
+\item 
+\mbox{\hyperlink{classmain_1_1_game_ac2462b440fa5627e3978089ca8a11a82}{font}}
+\item 
+\mbox{\hyperlink{classmain_1_1_game_a9293f1c97699238d9ef1b57cfd3932bb}{game\+\_\+over\+\_\+text}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}Main class of the game, managing setup, running game and clock.
+
+Initializes pygame, display and clock. Consists of Level object that manages map and other game mechanics.
+Plays background music, checks gamestate and manages ending the game.
+Runs the game by calling level and updates clock ticks.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classmain_1_1_game_a7418a349fc1b73abae4ebe1758bc3b29}\label{classmain_1_1_game_a7418a349fc1b73abae4ebe1758bc3b29}} 
+\index{main.Game@{main.Game}!\_\_init\_\_@{\_\_init\_\_}}
+\index{\_\_init\_\_@{\_\_init\_\_}!main.Game@{main.Game}}
+\doxysubsubsection{\texorpdfstring{\_\_init\_\_()}{\_\_init\_\_()}}
+{\footnotesize\ttfamily def main.\+Game.\+\_\+\+\_\+init\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classmain_1_1_game_a5923b67d0b7342d006df6a14733ec1a6}\label{classmain_1_1_game_a5923b67d0b7342d006df6a14733ec1a6}} 
+\index{main.Game@{main.Game}!run@{run}}
+\index{run@{run}!main.Game@{main.Game}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily def main.\+Game.\+run (\begin{DoxyParamCaption}\item[{}]{self }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Manaes loop running the game. Invokes methods needed every frame, ticks clock and check for game over or exit\end{DoxyVerb}
+ 
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classmain_1_1_game_a72f617c8a9c3f8387aaeff604c5a7770}\label{classmain_1_1_game_a72f617c8a9c3f8387aaeff604c5a7770}} 
+\index{main.Game@{main.Game}!clock@{clock}}
+\index{clock@{clock}!main.Game@{main.Game}}
+\doxysubsubsection{\texorpdfstring{clock}{clock}}
+{\footnotesize\ttfamily main.\+Game.\+clock}
+
+\mbox{\Hypertarget{classmain_1_1_game_ac2462b440fa5627e3978089ca8a11a82}\label{classmain_1_1_game_ac2462b440fa5627e3978089ca8a11a82}} 
+\index{main.Game@{main.Game}!font@{font}}
+\index{font@{font}!main.Game@{main.Game}}
+\doxysubsubsection{\texorpdfstring{font}{font}}
+{\footnotesize\ttfamily main.\+Game.\+font}
+
+\mbox{\Hypertarget{classmain_1_1_game_a9293f1c97699238d9ef1b57cfd3932bb}\label{classmain_1_1_game_a9293f1c97699238d9ef1b57cfd3932bb}} 
+\index{main.Game@{main.Game}!game\_over\_text@{game\_over\_text}}
+\index{game\_over\_text@{game\_over\_text}!main.Game@{main.Game}}
+\doxysubsubsection{\texorpdfstring{game\_over\_text}{game\_over\_text}}
+{\footnotesize\ttfamily main.\+Game.\+game\+\_\+over\+\_\+text}
+
+\mbox{\Hypertarget{classmain_1_1_game_adac0174b3ef9bc588ef0d7c0c3e8613e}\label{classmain_1_1_game_adac0174b3ef9bc588ef0d7c0c3e8613e}} 
+\index{main.Game@{main.Game}!level@{level}}
+\index{level@{level}!main.Game@{main.Game}}
+\doxysubsubsection{\texorpdfstring{level}{level}}
+{\footnotesize\ttfamily main.\+Game.\+level}
+
+\mbox{\Hypertarget{classmain_1_1_game_a5ca97d68ad1811d94ed53ed464ad9400}\label{classmain_1_1_game_a5ca97d68ad1811d94ed53ed464ad9400}} 
+\index{main.Game@{main.Game}!screen@{screen}}
+\index{screen@{screen}!main.Game@{main.Game}}
+\doxysubsubsection{\texorpdfstring{screen}{screen}}
+{\footnotesize\ttfamily main.\+Game.\+screen}
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+E\+:/studia/sem10/\+PSS/\+PROJ/prog/dungeon\+Crawler-\/main/dungeon\+\_\+crawler/\mbox{\hyperlink{main_8py}{main.\+py}}\end{DoxyCompactItemize}

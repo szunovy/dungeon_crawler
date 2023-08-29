@@ -10,6 +10,7 @@ from enemy import Enemy
 
 class Level:
     def __init__(self):
+        '''Inits Level class. Loads all needed assets, sets surface to display and creates proper sprite groups'''
         # get the display surface
         self.display_surface = pygame.display.get_surface()
 
@@ -26,12 +27,12 @@ class Level:
         # sounds
         self.death_sound = pygame.mixer.Sound('assets/sounds/death.mp3')
         self.death_sound.set_volume(1)
-
+        print(type(self.obstacle_sprites))
     def create_map(self): # creating map and spawning mobs and player
         self.load_map_images()
         self.load_enemies_images()
 
-        for row_index, row in enumerate(MAP):
+        for row_index, row in enumerate(MAP):  # creating map, player or enemy sprite from map file. refer to notes/symbols
             for col_index, col in enumerate(row):
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
@@ -74,6 +75,8 @@ class Level:
 
 
     def run(self):
+        '''Manages all steps and functions needed for a single frame and prints the frame on screen.'''
+
         # update and draw the game
         self.check_player_hit()
         self.check_game_over()
@@ -108,7 +111,7 @@ class Level:
         text_surface = my_font.render('EXP:' + str(self.player.exp), False, (255, 255, 255))
         self.display_surface.blit(text_surface, (450, 4))
 
-    def enemy_update(self, player):
+    def enemy_update(self, player):  # udating state of the enemies
         for enemy in self.enemy_sprites:
             enemy.enemy_update(player)
 

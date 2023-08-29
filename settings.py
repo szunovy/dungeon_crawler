@@ -1,19 +1,19 @@
 import csv
 from os import path
 # game setup
-WIDTH = 1280
-HEIGTH = 736
-FPS = 60
-TILESIZE = 32
+WIDTH = 1280  # width of the screen
+HEIGTH = 736  # heigth of the screen
+FPS = 60  # frame rate, defines clock tick rate
+TILESIZE = 32  # size of single tile of the map
 
-font_path = path.join('assets', 'font', 'Pixeltype.ttf')
-text_size = 100
+font_path = path.join('assets', 'font', 'Pixeltype.ttf')  # path to the font in assets
+text_size = 100  # size of big text
 
 file = open('map.csv','r')
-MAP = list(csv.reader(file,delimiter=","))
+MAP = list(csv.reader(file,delimiter=",")) # list map loaded from file
 file.close()
 
-enemies_stats = {
+enemies_stats = {  # dictionary of stats for each enemy type
         'skeleton' : {
                 'hp' : 100,
                 'exp' : 10,
@@ -51,7 +51,7 @@ enemies_stats = {
         },
 }
 
-player_stats = {
+player_stats = {  # dictionary of players character stats
         'hp': 100,
         'damage': 25,
         'speed': 2,

@@ -1,13 +1,14 @@
 import pygame
 
 class Entity(pygame.sprite.Sprite):
+	'''Basic class of entity, contains attributes and methods to animate, move sprite and manage collision'''
 	def __init__(self,groups):
 		super().__init__(groups)
 		self.frame_index = 0
 		self.animation_speed = 0.10
 		self.direction = pygame.math.Vector2()
 
-	def move(self,speed):
+	def move(self,speed):  # moves the entity depending on direction vector and speed
 		if self.direction.magnitude() != 0:
 			self.direction = self.direction.normalize()
 		self.rect.x += self.direction.x * speed
@@ -15,7 +16,7 @@ class Entity(pygame.sprite.Sprite):
 		self.rect.y += self.direction.y * speed
 		self.collision('vertical')
 
-	def collision(self,direction):
+	def collision(self,direction):  # if collided with obstacle sprite, moved to obstacle edge depending on direction
 		if direction == 'horizontal':
 			for sprite in self.obstacle_sprites:
 				if sprite.rect.colliderect(self.rect):

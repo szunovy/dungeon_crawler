@@ -3,7 +3,33 @@ import files_handling
 from settings import player_stats
 
 class Player(pygame.sprite.Sprite):
+    '''
+    Class of players character
+
+    Contains all attributes and methods for players character, players images, statistics,
+    and methods for handling all mechanics and interactions.
+
+    Attributes:
+        exp: int with experience points
+        hp: int with health points
+        weapon: string with current weapon name
+        sword: rectangle of players sword
+        direction: vector containing players movement direction (x,y)
+
+        rect: rectangle of players sprite
+        invulnerable: bool indicating that player can't be hit
+        attacking: bool indicator if player is currently attacking
+
+    '''
     def __init__(self, pos, groups, obstacle_sprites, enemy_sprites):
+        '''Inits Player class
+
+        Args:
+            pos: tuple (x,y) with coordinates where to spawn player
+            groups: tuple of sprite groups to add player sprite to
+            obstacle_sprites: group of obstacle sprites
+            enemy_sprites: group of enemy sprites
+        '''
         super().__init__(groups)
 
         self.images = files_handling.load_images('player', 0)
@@ -49,7 +75,7 @@ class Player(pygame.sprite.Sprite):
         self.weapon_sword_sound.set_volume(0.4)
 
     def input(self):
-
+        '''Manages input from keyboard'''
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] and not self.attacking:
             self.begin_attack = True
@@ -72,7 +98,8 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
 
 
-    def move(self, speed):
+    def move(self, speed):  # Moves the player depending on direction vector and input
+
         if self.direction.magnitude() != 0:
             self.move_status = 'run'
             self.direction = self.direction.normalize()
@@ -86,6 +113,8 @@ class Player(pygame.sprite.Sprite):
 
 
     def collision(self, direction):
+        '''Manages colision of player with obstacles'''
+
         if direction == 'horizontal':
             for sprite in self.obstacle_sprites:
                 if sprite.rect.colliderect(self.rect):
@@ -102,9 +131,9 @@ class Player(pygame.sprite.Sprite):
                         self.rect.top = sprite.rect.bottom
 
 
-    def animation(self):
-        animation = self.images[self.move_status + '_' + self.orientation]
+    def animation(self):  # Animates player sprite
 
+        animation = self.images[self.move_status + '_' + self.orientation]
         self.frame_index += self.animation_speed
         if self.frame_index >= len(animation):
             self.frame_index = 0
@@ -112,6 +141,7 @@ class Player(pygame.sprite.Sprite):
         self.image = animation[int(self.frame_index)]
 
     def get_damage(self, enemy):
+        '''Damages the player by value of attribute of enemy passed as argument, plays proper sound'''
         self.hp -= enemy.damage
         self.invulnerable = True
         self.hit_time = pygame.time.get_ticks()
@@ -119,6 +149,8 @@ class Player(pygame.sprite.Sprite):
         self.hit_sound.play()
 
     def attack(self):  # attacking and setting parameters to create weapon in proper direction
+        '''Checks if player is attacking and attack is not on cooldown and starts and attack '''
+
         if not self.attack_cooldown and self.begin_attack:
             self.weapon_sword_sound.play()
             self.begin_attack = False
@@ -135,7 +167,7 @@ class Player(pygame.sprite.Sprite):
                 self.attack_direction = self.attack_orientation
 
 
-    def cooldowns(self):
+    def cooldowns(self):  # Manages cooldowns
         current_time = pygame.time.get_ticks()
 
         if self.invulnerable:
@@ -153,12 +185,14 @@ class Player(pygame.sprite.Sprite):
                 self.attacking = False
 
     def update(self):
+        '''Manages all actions of updating a sprite between frames. Should be invoked every frame'''
+
         self.animation()
         self.input()
         self.move(self.speed)
         self.cooldowns()
 
-    def create_weapon(self):  # creating weapon on screen for the frame
+    def create_weapon(self):  # creating weapon on screen for the frame. Is invoked in cooldowns()
         if self.attack_direction == 'R':
             self.sword = self.screen.blit(pygame.transform.rotate(self.sword_texture, 270),
                                       [self.rect.x + 12, self.rect.y + 16])

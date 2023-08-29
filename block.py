@@ -2,7 +2,15 @@ import pygame
 from settings import *
 
 class Block(pygame.sprite.Sprite):  # static blocks
+    '''Static block sprite class.'''
     def __init__(self, pos, groups, image):
+        '''Inits static block class
+
+        args:
+            pos: tuple (x,y) with position of block
+            groups: tuple of groups that sprite belongs to
+            image: image of the created sprite
+        '''
         super().__init__(groups)
         if type(image) is list:  # dealing with different types that could be input
             self.image = image[0]
@@ -11,7 +19,15 @@ class Block(pygame.sprite.Sprite):  # static blocks
         self.rect = self.image.get_rect(topleft=pos)
 
 class AnimatedBlock(pygame.sprite.Sprite):  #animated blocks
+    '''Animated block sprite class'''
     def __init__(self, pos, groups, images):
+        '''Inits static block class
+
+        Args:
+            pos: tuple (x,y) with position of block
+            tuple: of groups that sprite belongs to
+            list: of images for sprite animation
+        '''
         super().__init__(groups)
 
         self.images = images
@@ -22,7 +38,7 @@ class AnimatedBlock(pygame.sprite.Sprite):  #animated blocks
         self.animation_speed = 0.10
 
 
-    def animation(self):
+    def animation(self):  # animates the sprite
 
         # loop over the frame index
         self.frame_index += self.animation_speed
